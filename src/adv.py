@@ -1,10 +1,11 @@
+import os
+from player import Player
 from room import Room
 
 # Declare all the rooms
-
-room = {
+rooms = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons."),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -24,20 +25,22 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+rooms["outside"].rooms_to["n"] = rooms["foyer"]
+rooms["foyer"].rooms_to["s"] = rooms["outside"]
+rooms["foyer"].rooms_to["n"] = rooms["overlook"]
+rooms["foyer"].rooms_to["e"] = rooms["narrow"]
+rooms["overlook"].rooms_to["s"] = rooms["foyer"]
+rooms["narrow"].rooms_to["w"] = rooms["foyer"]
+rooms["narrow"].rooms_to["n"] = rooms["treasure"]
+rooms["treasure"].rooms_to["s"] = rooms["narrow"]
 
 #
 # Main
 #
 
-# Make a new player object that is currently in the 'outside' room.
+Player = Player(rooms=rooms, room_current=rooms["outside"])
+Player.run()
+
 
 # Write a loop that:
 #
